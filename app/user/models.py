@@ -25,10 +25,10 @@ class User(AbstractUser):
         verbose_name='email address',
         max_length=255,
         unique=True)
-    username = models.CharField(max_length=150, blank=True, null=True)
+    username = models.CharField(max_length=150, blank=True, null=True, unique=False)
     is_company_owner = models.BooleanField(default=False)
     company = models.ForeignKey('company.Company',
-                                on_delete=models.CASCADE,
+                                on_delete=models.SET_NULL,
                                 null=True,
                                 blank=True,
                                 related_name='users')
@@ -38,5 +38,3 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def __str__(self):
-        return self.email

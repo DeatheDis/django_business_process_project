@@ -1,10 +1,14 @@
 from rest_framework import serializers
 
 from .models import User
+from company.models import Company
 
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=6)
+    email = serializers.EmailField(required=True)
+    username = serializers.CharField(required=False, allow_blank=True)
+    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = User
@@ -14,10 +18,6 @@ class UserSerializer(serializers.ModelSerializer):
                   'password',
                   'is_company_owner',
                   'company', ]
-
-    extra_kwargs = {'username': {'required': False},
-                    'email': {'required': True}
-                    }
 
     def create(self, validated_data):
         user = User.objects.create_user(
