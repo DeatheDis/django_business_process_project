@@ -19,10 +19,4 @@ class CompanySerializer(serializers.ModelSerializer):
                   'title',
                   'owner',]
 
-    def validate(self, attrs):
-        request = self.context.get('request')
-        view = self.context.get('view')
-        if request and request.user.is_authenticated and getattr(view, 'action', None) == 'create':
-            if Company.objects.filter(owner=request.user).exists():
-                raise serializers.ValidationError('Нельзя создать компанию: вы уже являетесь владельцем компании.')
-        return attrs
+

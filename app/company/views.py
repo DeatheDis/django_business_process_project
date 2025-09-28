@@ -1,7 +1,8 @@
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from .serializers import CompanySerializer
-from .permissions import IsCompanyOwner
+from .permissions import IsCompanyOwner, CanCreateCompany
 from company.models import Company
 
 from drf_spectacular.utils import (
@@ -19,9 +20,18 @@ class CompanyViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsCompanyOwner]
     http_method_names = ['get', 'post', 'put', 'delete']
 
+    def get_permissions(self):
+        if self.action == 'create':
+            return [IsAuthenticated(), CanCreateCompany()]
+        if self.action in ['update', 'destroy']:
+            return [IsAuthenticated(), IsCompanyOwner()]
+        return [IsAuthenticated()]
+
     def perform_create(self, serializer):
-        company = serializer.save(owner=self.request.user)
         user = self.request.user
+        if user.company_id is not None:
+            raise ValidationError('Вы уже состоите в компании и не можете создать новую')
+        company = serializer.save(owner=self.request.user)
         user.company = company
         user.is_company_owner = True
         user.save(update_fields=['company', 'is_company_owner'])
@@ -33,4 +43,3 @@ class CompanyViewSet(ModelViewSet):
             owner.save(update_fields=['is_company_owner'])
 
         instance.delete()
-

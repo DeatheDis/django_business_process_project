@@ -23,4 +23,5 @@ urlpatterns = [
     path(f'{BASE_API_V1_PREFIX}/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path(f'{BASE_API_V1_PREFIX}/', include('user.urls')),
     path(f'{BASE_API_V1_PREFIX}/', include('company.urls')),
+    path(f'{BASE_API_V1_PREFIX}/', include('storage.urls')),
 ]
