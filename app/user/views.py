@@ -11,17 +11,14 @@ from drf_spectacular.utils import (
 @extend_schema(
     tags=['Users'],
     request=UserSerializer,
-    description='Регистрация нового пользователя',
     auth=[],
     examples=[
         OpenApiExample(
-            'Register without company',
+            'Регистрация',
             value={
                 "username": "Test",
                 "email": "test@test.com",
-                "password": "123456",
-                "is_company_owner": False,
-                "company": None
+                "password": "123456"
             }
         ),
     ]

@@ -6,5 +6,5 @@ from .models import Storage
 class StorageAdmin(admin.ModelAdmin):
     list_display = ('id', 'address', 'company')
     list_display_links = ('id', 'address', 'company')
-    search_fields = ('address', 'company')
-    list_filter = ('address', 'company')
+    search_fields = ('address', 'company__title', 'company__inn')
+    list_filter = ('company', )
