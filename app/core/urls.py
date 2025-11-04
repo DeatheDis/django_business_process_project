@@ -24,4 +24,5 @@ urlpatterns = [
     path(f'{BASE_API_V1_PREFIX}/', include('user.urls')),
     path(f'{BASE_API_V1_PREFIX}/', include('company.urls')),
     path(f'{BASE_API_V1_PREFIX}/', include('storage.urls')),
+    path(f'{BASE_API_V1_PREFIX}/', include('products.urls')),
 ]
